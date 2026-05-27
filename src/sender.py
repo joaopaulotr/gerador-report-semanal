@@ -14,7 +14,7 @@ SMTP_PORT = 587
 
 def _build_subject() -> str:
     week_number = date.today().isocalendar()[1]
-    return f"{config.EMAIL_SUBJECT_PREFIX} — Semana {week_number} | Engenharia de Dados & IA"
+    return f"{config.EMAIL_SUBJECT_PREFIX} — Semana {week_number} | João Paulo"
 
 
 def send_report(body: str) -> None:
@@ -24,7 +24,7 @@ def send_report(body: str) -> None:
     msg["From"] = config.GMAIL_USER
     msg["To"] = config.EMAIL_RECIPIENT
     msg["Subject"] = subject
-    msg.attach(MIMEText(body, "plain", "utf-8"))
+    msg.attach(MIMEText(body, "html", "utf-8"))
 
     logger.info(f"Connecting to {SMTP_HOST}:{SMTP_PORT}")
 

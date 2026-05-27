@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from typing import Optional
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -19,7 +20,7 @@ def _build_service():
     return build("drive", "v3", credentials=creds)
 
 
-def _find_folder(service, name: str, parent_id: str = None) -> str | None:
+def _find_folder(service, name: str, parent_id: str = None) -> Optional[str]:
     query = f"name = '{name}' and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
     if parent_id:
         query += f" and '{parent_id}' in parents"
@@ -29,7 +30,7 @@ def _find_folder(service, name: str, parent_id: str = None) -> str | None:
     return files[0]["id"] if files else None
 
 
-def _find_file(service, name: str, parent_id: str) -> str | None:
+def _find_file(service, name: str, parent_id: str) -> Optional[str]:
     query = f"name = '{name}' and '{parent_id}' in parents and trashed = false"
     result = service.files().list(q=query, fields="files(id, name)").execute()
     files = result.get("files", [])
@@ -41,7 +42,7 @@ def _download_file(service, file_id: str) -> str:
     return content.decode("utf-8")
 
 
-def get_weekly_report() -> str | None:
+def get_weekly_report() -> Optional[str]:
     today = date.today()
     week_number = today.isocalendar()[1]
     year = today.year
