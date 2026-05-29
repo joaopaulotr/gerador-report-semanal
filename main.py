@@ -14,20 +14,24 @@ from src.sender import send_report
 
 
 def main():
-    logger.info("📂 Step 1/3 — Reading report from Google Drive")
-    raw_content = get_weekly_report()
+    try:
+        logger.info("📂 Step 1/3 — Reading report from Google Drive")
+        raw_content = get_weekly_report()
 
-    if raw_content is None:
-        logger.error("❌ Report file not found. Check Drive folder structure and service account permissions.")
+        if raw_content is None:
+            logger.error("❌ Report file not found. Check Drive folder structure and service account permissions.")
+            sys.exit(1)
+
+        logger.info("🤖 Step 2/3 — Formatting report with GPT-4o")
+        formatted = format_report(raw_content)
+
+        logger.info("📧 Step 3/3 — Sending email via Gmail SMTP")
+        send_report(formatted)
+
+        logger.info("✅ Done — Weekly report sent successfully")
+    except Exception as e:
+        logger.error(f"❌ Fatal error: {e}", exc_info=True)
         sys.exit(1)
-
-    logger.info("🤖 Step 2/3 — Formatting report with GPT-4o")
-    formatted = format_report(raw_content)
-
-    logger.info("📧 Step 3/3 — Sending email via Gmail SMTP")
-    send_report(formatted)
-
-    logger.info("✅ Done — Weekly report sent successfully")
 
 
 if __name__ == "__main__":

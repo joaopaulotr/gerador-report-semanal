@@ -37,6 +37,7 @@ def send_report(body: str) -> None:
             try:
                 server.login(config.GMAIL_USER, config.GMAIL_APP_PASSWORD)
             except smtplib.SMTPAuthenticationError as e:
+                logger.error(f"Gmail authentication failed. Check GMAIL_USER and GMAIL_APP_PASSWORD. Error: {e}")
                 raise RuntimeError(
                     f"Gmail authentication failed. Check GMAIL_USER and GMAIL_APP_PASSWORD. Error: {e}"
                 )
@@ -45,6 +46,8 @@ def send_report(body: str) -> None:
             logger.info(f"Email sent to {config.EMAIL_RECIPIENT} | Subject: {subject}")
 
     except smtplib.SMTPConnectError as e:
+        logger.error(f"Could not connect to {SMTP_HOST}:{SMTP_PORT}. Error: {e}")
         raise RuntimeError(f"Could not connect to {SMTP_HOST}:{SMTP_PORT}. Error: {e}")
     except smtplib.SMTPException as e:
+        logger.error(f"SMTP error: {e}")
         raise RuntimeError(f"SMTP error: {e}")

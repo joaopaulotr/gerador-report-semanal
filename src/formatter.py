@@ -17,10 +17,13 @@ Retorne APENAS um JSON com esta estrutura exata:
 }
 
 Regras para reescrever as tarefas em "tasks":
-- Consolide tudo que foi feito: engenharia, IA, estudos, reuniões — lista única
+- CADA tarefa deve ser um elemento separado no array — nunca junte duas tarefas em uma string
+- Uma entrega = um elemento do array. Não use \\n dentro de strings
+- Consolide tudo que foi feito: engenharia, IA, estudos, reuniões — uma lista com múltiplos itens
 - Tom profissional direto, padrão mercado de trabalho tech
 - Preserve todas as métricas e números exatamente como estão (ex: AUC 0.87, redução de 40%)
 - Reescreva como entrega concluída, não como nota pessoal
+- Itens marcados como "A FAZER" ou "EM ANDAMENTO" vão em "next_week", não em "tasks"
 - Se bloqueios ou próxima semana não tiverem conteúdo, retorne lista vazia []
 - Não invente informação que não esteja nas notas"""
 
@@ -206,6 +209,14 @@ def format_report(raw_content: str) -> str:
     )
 
     data = json.loads(response.choices[0].message.content)
+
+    for key in ("tasks", "blockers", "next_week"):
+        expanded = []
+        for item in data.get(key, []):
+            parts = [p.strip() for p in item.split("\n") if p.strip()]
+            expanded.extend(parts)
+        data[key] = expanded
+
     week, date_range = _current_week_info()
     html = _build_html(data, week, date_range)
     logger.info(f"HTML formatted — Semana {week} | {date_range} ({len(html)} chars)")
