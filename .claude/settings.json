@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "WebFetch(domain:pesquisemais.com.br)"
+      "WebFetch(domain:pesquisemais.com.br)",
+      "WebSearch"
     ]
   }
 }
