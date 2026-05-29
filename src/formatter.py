@@ -39,8 +39,12 @@ def _bullet_rows(items: list) -> str:
     for item in items:
         rows.append(
             f'<tr>'
-            f'<td width="20" valign="top" style="font-family: Arial, sans-serif; font-size: 16px; line-height: 22px; color: #00C9A7; padding: 0 0 10px 0; mso-line-height-rule: exactly;">&#8250;</td>'
-            f'<td valign="top" style="font-family: Arial, sans-serif; font-size: 14px; line-height: 22px; color: #a1a1aa; padding: 0 0 10px 0; mso-line-height-rule: exactly;">{item}</td>'
+            f'<td width="20" valign="top"'
+            f' style="font-family: Arial, sans-serif; font-size: 16px; line-height: 22px;'
+            f' color: #00E5C4; padding: 0 0 10px 0; mso-line-height-rule: exactly;">&#8250;</td>'
+            f'<td valign="top"'
+            f' style="font-family: Arial, sans-serif; font-size: 14px; line-height: 22px;'
+            f' color: #D1D5DB; padding: 0 0 10px 0; mso-line-height-rule: exactly;">{item}</td>'
             f'</tr>'
         )
     return "".join(rows)
@@ -51,25 +55,24 @@ def _section(title: str, items: list) -> str:
         return ""
     return (
         f'<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">'
-        # left accent bar + title row
         f'<tr>'
-        f'<td width="3" bgcolor="#00C9A7" style="background-color: #00C9A7; font-size: 1px; line-height: 1px; border-radius: 2px;">&nbsp;</td>'
-        f'<td style="padding: 0 0 0 12px;">'
-        f'<p style="margin: 0; mso-margin-top-alt: 0; mso-margin-bottom-alt: 0; font-family: Arial, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.8px; color: #00C9A7;">{title}</p>'
+        f'<td width="3" bgcolor="#00E5C4"'
+        f' style="background-color: #00E5C4; font-size: 1px; line-height: 1px;">&nbsp;</td>'
+        f'<td style="padding: 0 0 0 14px;">'
+        f'<p style="margin: 0; mso-margin-top-alt: 0; mso-margin-bottom-alt: 0;'
+        f' font-family: Arial, sans-serif; font-size: 10px; font-weight: 700;'
+        f' text-transform: uppercase; letter-spacing: 2px; color: #00E5C4;">{title}</p>'
         f'</td>'
         f'</tr>'
-        # spacer
         f'<tr><td colspan="2" height="14" style="font-size: 1px; line-height: 1px;">&nbsp;</td></tr>'
-        # bullet rows (indented to align with title text)
         f'<tr>'
         f'<td width="3" style="font-size: 1px;">&nbsp;</td>'
-        f'<td style="padding-left: 12px;">'
+        f'<td style="padding-left: 14px;">'
         f'<table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">'
         f'{_bullet_rows(items)}'
         f'</table>'
         f'</td>'
         f'</tr>'
-        # bottom spacer
         f'<tr><td colspan="2" height="28" style="font-size: 1px; line-height: 1px;">&nbsp;</td></tr>'
         f'</table>'
     )
@@ -86,78 +89,101 @@ def _build_html(data: dict, week: int, date_range: str) -> str:
 <html lang="pt-BR" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
 <meta charset="UTF-8">
-<meta name="color-scheme" content="dark">
-<meta name="supported-color-schemes" content="dark">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
 <!--[if gte mso 9]><xml>
 <o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings>
 </xml><![endif]-->
 </head>
-<body style="margin: 0; padding: 0; background-color: #09090b;" bgcolor="#09090b">
+<body style="margin: 0; padding: 0; background-color: #0D0D0D;" bgcolor="#0D0D0D">
 
-<table width="100%" bgcolor="#09090b" cellpadding="0" cellspacing="0" border="0" role="presentation">
+<style>
+  /* Gmail reads <style> in <body>. New Outlook also respects this. */
+  /* color-scheme:light tells Outlook: "don't touch my colors". */
+  [data-ogsc] body       {{ background-color: #0D0D0D !important; }}
+  [data-ogsc] table.wrap {{ background-color: #0D0D0D !important; }}
+  [data-ogsc] table.card {{ background-color: #1A1A1A !important; }}
+  [data-ogsc] td.c-head  {{ background-color: #1A1A1A !important; }}
+  [data-ogsc] td.c-body  {{ background-color: #1A1A1A !important; }}
+  [data-ogsc] td.c-foot  {{ background-color: #0D0D0D !important; }}
+  [data-ogsc] .t-label   {{ color: #6B7280 !important; }}
+  [data-ogsc] .t-week    {{ color: #FFFFFF !important; }}
+  [data-ogsc] .t-date    {{ color: #9CA3AF !important; }}
+  [data-ogsc] .t-teal    {{ color: #00E5C4 !important; }}
+  [data-ogsc] .t-body    {{ color: #D1D5DB !important; }}
+  [data-ogsc] .t-foot    {{ color: #4B5563 !important; }}
+  [data-ogsc] td.div-bar {{ background-color: #2D2D2D !important; }}
+  [data-ogsc] td.acc-bar {{ background-color: #00E5C4 !important; }}
+</style>
+
+<table class="wrap" width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation"
+       bgcolor="#0D0D0D" style="background-color: #0D0D0D;">
   <tr>
     <td align="center" style="padding: 40px 16px;">
 
-      <!-- outer card -->
-      <table width="560" align="center" cellpadding="0" cellspacing="0" border="0" role="presentation"
-             style="width: 560px; background-color: #18181b; border: 1px solid #27272a;"
-             bgcolor="#18181b">
+      <table class="card" width="560" align="center" cellpadding="0" cellspacing="0" border="0"
+             role="presentation" bgcolor="#1A1A1A"
+             style="width: 560px; background-color: #1A1A1A;">
 
-        <!-- ACCENT BAR top -->
+        <!-- ACCENT TOP BAR -->
         <tr>
-          <td height="4" bgcolor="#00C9A7"
-              style="background-color: #00C9A7; font-size: 1px; line-height: 1px; padding: 0;">&nbsp;</td>
+          <td class="acc-bar" height="4" bgcolor="#00E5C4"
+              style="background-color: #00E5C4; font-size: 1px; line-height: 1px; padding: 0;">&nbsp;</td>
         </tr>
 
         <!-- HEADER -->
         <tr>
-          <td bgcolor="#18181b" style="background-color: #18181b; padding: 36px 40px 28px 40px;">
-            <p style="margin: 0; mso-margin-top-alt: 0; mso-margin-bottom-alt: 0;
+          <td class="c-head" bgcolor="#1A1A1A"
+              style="background-color: #1A1A1A; padding: 36px 40px 28px 40px;">
+            <p class="t-label"
+               style="margin: 0; mso-margin-top-alt: 0; mso-margin-bottom-alt: 0;
                       font-family: Arial, sans-serif; font-size: 10px; font-weight: 700;
-                      text-transform: uppercase; letter-spacing: 2.5px; color: #52525b;
+                      text-transform: uppercase; letter-spacing: 2.5px; color: #6B7280;
                       mso-line-height-rule: exactly;">Relat&oacute;rio Semanal</p>
-            <p style="margin: 10px 0 0 0; mso-margin-top-alt: 10px; mso-margin-bottom-alt: 0;
-                      font-family: Arial, sans-serif; font-size: 26px; font-weight: 700;
-                      color: #fafafa; mso-line-height-rule: exactly; line-height: 1.2;">
-              Semana {week}
-            </p>
-            <p style="margin: 4px 0 0 0; mso-margin-top-alt: 4px; mso-margin-bottom-alt: 0;
-                      font-family: Arial, sans-serif; font-size: 14px; font-weight: 400;
-                      color: #71717a; mso-line-height-rule: exactly;">{date_range}</p>
+            <p class="t-week"
+               style="margin: 10px 0 0 0; mso-margin-top-alt: 10px; mso-margin-bottom-alt: 0;
+                      font-family: Arial, sans-serif; font-size: 28px; font-weight: 700;
+                      color: #FFFFFF; line-height: 1.2; mso-line-height-rule: exactly;">Semana {week}</p>
+            <p class="t-date"
+               style="margin: 6px 0 0 0; mso-margin-top-alt: 6px; mso-margin-bottom-alt: 0;
+                      font-family: Arial, sans-serif; font-size: 14px; color: #9CA3AF;
+                      mso-line-height-rule: exactly;">{date_range}</p>
           </td>
         </tr>
 
-        <!-- HEADER DIVIDER -->
+        <!-- DIVIDER -->
         <tr>
-          <td height="1" bgcolor="#27272a"
-              style="background-color: #27272a; font-size: 1px; line-height: 1px; padding: 0;">&nbsp;</td>
+          <td class="div-bar" height="1" bgcolor="#2D2D2D"
+              style="background-color: #2D2D2D; font-size: 1px; line-height: 1px; padding: 0;">&nbsp;</td>
         </tr>
 
         <!-- CONTENT -->
         <tr>
-          <td bgcolor="#18181b" style="background-color: #18181b; padding: 32px 40px 8px 40px;">
+          <td class="c-body" bgcolor="#1A1A1A"
+              style="background-color: #1A1A1A; padding: 32px 40px 8px 40px;">
             {sections}
           </td>
         </tr>
 
-        <!-- FOOTER DIVIDER -->
+        <!-- DIVIDER -->
         <tr>
-          <td height="1" bgcolor="#27272a"
-              style="background-color: #27272a; font-size: 1px; line-height: 1px; padding: 0;">&nbsp;</td>
+          <td class="div-bar" height="1" bgcolor="#2D2D2D"
+              style="background-color: #2D2D2D; font-size: 1px; line-height: 1px; padding: 0;">&nbsp;</td>
         </tr>
 
         <!-- FOOTER -->
         <tr>
-          <td bgcolor="#09090b" style="background-color: #09090b; padding: 18px 40px;">
-            <p style="margin: 0; mso-margin-top-alt: 0; mso-margin-bottom-alt: 0;
-                      font-family: Arial, sans-serif; font-size: 11px; color: #3f3f46;">
+          <td class="c-foot" bgcolor="#0D0D0D"
+              style="background-color: #0D0D0D; padding: 18px 40px;">
+            <p class="t-foot"
+               style="margin: 0; mso-margin-top-alt: 0; mso-margin-bottom-alt: 0;
+                      font-family: Arial, sans-serif; font-size: 11px; color: #4B5563;">
               P+Solution Research &nbsp;&middot;&nbsp; Engenharia de Dados &amp; IA
             </p>
           </td>
         </tr>
 
       </table>
-
     </td>
   </tr>
 </table>
