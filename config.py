@@ -13,8 +13,8 @@ def get_required(key: str) -> str:
 
 
 OPENAI_API_KEY = get_required("OPENAI_API_KEY")
-GMAIL_USER = get_required("GMAIL_USER")
-GMAIL_APP_PASSWORD = get_required("GMAIL_APP_PASSWORD")
+RESEND_API_KEY = get_required("RESEND_API_KEY")
+EMAIL_FROM = get_required("EMAIL_FROM")
 EMAIL_RECIPIENT = get_required("EMAIL_RECIPIENT")
 EMAIL_SUBJECT_PREFIX = os.getenv("EMAIL_SUBJECT_PREFIX", "Relatório Semanal")
 GDRIVE_REPORTS_FOLDER_NAME = os.getenv("GDRIVE_REPORTS_FOLDER_NAME", "Reports")
